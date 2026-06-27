@@ -1,0 +1,831 @@
+[
+    {
+        "id": "918af7635afbfa0f",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "mqtt-alarm",
+        "type": "mqtt in",
+        "z": "918af7635afbfa0f",
+        "name": "MQTT: Strumień alarmowy",
+        "topic": "lodowka/alarm",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "local-mqtt",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 350,
+        "y": 640,
+        "wires": [
+            [
+                "491ca5f39d8352b3"
+            ]
+        ]
+    },
+    {
+        "id": "ui-alarm",
+        "type": "ui_text",
+        "z": "918af7635afbfa0f",
+        "group": "aea722c3c7129abf",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Ostatni alarm",
+        "format": "{{msg.payload}}",
+        "layout": "",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 1230,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "mqtt-sensory",
+        "type": "mqtt in",
+        "z": "918af7635afbfa0f",
+        "name": "MQTT: Dane z czujników",
+        "topic": "lodowka/sensory",
+        "qos": "2",
+        "datatype": "utf8",
+        "broker": "local-mqtt",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 330,
+        "y": 260,
+        "wires": [
+            [
+                "90f785ea14c95432"
+            ]
+        ]
+    },
+    {
+        "id": "extract-temp",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Parsowanie - Temperatura",
+        "func": "let temp = msg.payload.temperatura;\n\nmsg.payload = temp;\n\nmsg.topic = \"Temperatura\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 240,
+        "wires": [
+            [
+                "gauge-temp",
+                "chart-temp"
+            ]
+        ]
+    },
+    {
+        "id": "gauge-temp",
+        "type": "ui_gauge",
+        "z": "918af7635afbfa0f",
+        "name": "",
+        "group": "45b9f86db8ee041e",
+        "order": 3,
+        "width": 4,
+        "height": 4,
+        "gtype": "gage",
+        "title": "Temperatura",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 50,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1290,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "chart-temp",
+        "type": "ui_chart",
+        "z": "918af7635afbfa0f",
+        "name": "",
+        "group": "bae641eebc7a5d0e",
+        "order": 1,
+        "width": 12,
+        "height": 4,
+        "label": "Temperatura - historia",
+        "chartType": "line",
+        "xformat": "HH:mm:ss",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": "",
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1500,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "lwt-w1",
+        "type": "mqtt in",
+        "z": "918af7635afbfa0f",
+        "topic": "lodowka/wezel1/status",
+        "broker": "local-mqtt",
+        "inputs": 0,
+        "x": 620,
+        "y": 900,
+        "wires": [
+            [
+                "ui-led-w1"
+            ]
+        ]
+    },
+    {
+        "id": "ui-led-w1",
+        "type": "ui_text",
+        "z": "918af7635afbfa0f",
+        "group": "aea722c3c7129abf",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Węzeł 1 (RFID)",
+        "format": "{{msg.payload}}",
+        "layout": "",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 860,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "lwt-w2",
+        "type": "mqtt in",
+        "z": "918af7635afbfa0f",
+        "name": "",
+        "topic": "lodowka/wezel2/status",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "local-mqtt",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 620,
+        "y": 960,
+        "wires": [
+            [
+                "ui-led-w2"
+            ]
+        ]
+    },
+    {
+        "id": "ui-led-w2",
+        "type": "ui_text",
+        "z": "918af7635afbfa0f",
+        "group": "aea722c3c7129abf",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Węzeł 2 (BME)",
+        "format": "{{msg.payload}}",
+        "layout": "",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 860,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "lwt-w3",
+        "type": "mqtt in",
+        "z": "918af7635afbfa0f",
+        "topic": "lodowka/wezel3/status",
+        "broker": "local-mqtt",
+        "inputs": 0,
+        "x": 620,
+        "y": 1040,
+        "wires": [
+            [
+                "ui-led-w3"
+            ]
+        ]
+    },
+    {
+        "id": "ui-led-w3",
+        "type": "ui_text",
+        "z": "918af7635afbfa0f",
+        "group": "aea722c3c7129abf",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Węzeł 3 (Ruch)",
+        "format": "{{msg.payload}}",
+        "layout": "",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 860,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "c307f46949df5b29",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Formatowanie dla API Telegram",
+        "func": "msg.payload = {\n    chatId: 5066881334, \n    type: \"message\",\n    content: \"🚨 ALARM! \" + msg.payload.alarm\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 700,
+        "wires": [
+            [
+                "f3dcf121f91cf558"
+            ]
+        ]
+    },
+    {
+        "id": "f3dcf121f91cf558",
+        "type": "telegram sender",
+        "z": "918af7635afbfa0f",
+        "name": "",
+        "bot": "8c41fdd390d50f36",
+        "haserroroutput": false,
+        "outputs": 1,
+        "x": 1250,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "func-wilg",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Parsowanie - Wilgotność",
+        "func": "msg.payload = msg.payload.wilgotnosc;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 180,
+        "wires": [
+            [
+                "gauge-wilg"
+            ]
+        ]
+    },
+    {
+        "id": "gauge-wilg",
+        "type": "ui_gauge",
+        "z": "918af7635afbfa0f",
+        "name": "",
+        "group": "45b9f86db8ee041e",
+        "order": 1,
+        "width": 4,
+        "height": 4,
+        "gtype": "gage",
+        "title": "Wilgotność",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 100,
+        "colors": [
+            "#0080ff",
+            "#00ff80",
+            "#ff0000"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1230,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "func-cisn",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Parsowanie - Ciśnienie",
+        "func": "msg.payload = msg.payload.cisnienie;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1020,
+        "y": 120,
+        "wires": [
+            [
+                "gauge-cisn"
+            ]
+        ]
+    },
+    {
+        "id": "gauge-cisn",
+        "type": "ui_gauge",
+        "z": "918af7635afbfa0f",
+        "name": "",
+        "group": "45b9f86db8ee041e",
+        "order": 2,
+        "width": 4,
+        "height": 4,
+        "gtype": "gage",
+        "title": "Ciśnienie",
+        "label": "hPa",
+        "format": "{{value}}",
+        "min": 950,
+        "max": 1050,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1220,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "71ea5299ec3f9717",
+        "type": "debug",
+        "z": "918af7635afbfa0f",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "b3e6ac84e1b84dd9",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Ekstrakcja - Komunikat alarmu",
+        "func": "msg.payload = msg.payload.alarm;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 950,
+        "y": 640,
+        "wires": [
+            [
+                "ui-alarm"
+            ]
+        ]
+    },
+    {
+        "id": "sql-format",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Przygotuj SQL",
+        "func": "let t = msg.payload.temperatura || 0;\nlet w = msg.payload.wilgotnosc || 0;\nlet c = msg.payload.cisnienie || 0;\n\nmsg.topic = \"INSERT INTO pomiary (temperatura, wilgotnosc, cisnienie) VALUES (\" + t + \", \" + w + \", \" + c + \");\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 420,
+        "wires": [
+            [
+                "sql-db"
+            ]
+        ]
+    },
+    {
+        "id": "sql-db",
+        "type": "sqlite",
+        "z": "918af7635afbfa0f",
+        "mydb": "mydb-config",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "Zapis do Bazy",
+        "x": 1060,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "sql-init",
+        "type": "inject",
+        "z": "918af7635afbfa0f",
+        "name": "Inicjalizacja: Tabela SQLite",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "CREATE TABLE IF NOT EXISTS pomiary (id INTEGER PRIMARY KEY AUTOINCREMENT, czas DATETIME DEFAULT (datetime('now','localtime')), temperatura REAL, wilgotnosc REAL, cisnienie REAL);",
+        "x": 760,
+        "y": 500,
+        "wires": [
+            [
+                "sql-db"
+            ]
+        ]
+    },
+    {
+        "id": "32c33c7ff26e49a9",
+        "type": "debug",
+        "z": "918af7635afbfa0f",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "cfd7f2519267b1b7",
+        "type": "debug",
+        "z": "918af7635afbfa0f",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "295932bd4e483809",
+        "type": "mqtt in",
+        "z": "918af7635afbfa0f",
+        "name": "MQTT: Status logiczny zamka",
+        "topic": "lodowka/status",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "local-mqtt",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 580,
+        "y": 820,
+        "wires": [
+            [
+                "cfd7f2519267b1b7",
+                "e3d4c66796292d37"
+            ]
+        ]
+    },
+    {
+        "id": "sql-query-hist",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Generuj zapytanie SELECT",
+        "func": "msg.topic = \"SELECT temperatura, czas FROM pomiary ORDER BY czas ASC LIMIT 1000\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 400,
+        "wires": [
+            [
+                "sqlite-hist"
+            ]
+        ]
+    },
+    {
+        "id": "sqlite-hist",
+        "type": "sqlite",
+        "z": "918af7635afbfa0f",
+        "mydb": "mydb-config",
+        "sqlquery": "msg.topic",
+        "sql": "",
+        "name": "Baza Danych (Odczyt)",
+        "x": 1180,
+        "y": 320,
+        "wires": [
+            [
+                "format-chart-hist"
+            ]
+        ]
+    },
+    {
+        "id": "format-chart-hist",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Formatowanie danych wykresu",
+        "func": "var data = [{\n    \"series\": [\"Temperatura\"],\n    \"data\": [ [] ],\n    \"labels\": [\"Temperatura\"]\n}];\n\nif (Array.isArray(msg.payload)) {\n    msg.payload.forEach(function(row) {\n        let czasIso = row.czas.replace(' ', 'T');\n        data[0].data[0].push({\n            x: new Date(czasIso).getTime(),\n            y: row.temperatura\n        });\n    });\n}\n\nmsg.payload = data;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1310,
+        "y": 420,
+        "wires": [
+            [
+                "chart-temp"
+            ]
+        ]
+    },
+    {
+        "id": "c836d6d426b4097e",
+        "type": "ui_ui_control",
+        "z": "918af7635afbfa0f",
+        "name": "Wyzwalacz - Załadowanie UI",
+        "events": "all",
+        "x": 860,
+        "y": 320,
+        "wires": [
+            [
+                "sql-query-hist"
+            ]
+        ]
+    },
+    {
+        "id": "7be72f62892b6321",
+        "type": "ui_text",
+        "z": "918af7635afbfa0f",
+        "group": "aea722c3c7129abf",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Status drzwi",
+        "format": "{{msg.payload}}",
+        "layout": "",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 1210,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "e3d4c66796292d37",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Ekstrakcja - status drzwi",
+        "func": "msg.payload = msg.payload.event;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 930,
+        "y": 760,
+        "wires": [
+            [
+                "7be72f62892b6321"
+            ]
+        ]
+    },
+    {
+        "id": "491ca5f39d8352b3",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Deszyfrator",
+        "func": "let klucz = \"INZYNIER2024\";\nlet szyfrogram = msg.payload.toString(); \nlet odszyfrowane = \"\";\n\nfor (let i = 0; i < szyfrogram.length; i += 2) {\n    let bajt = parseInt(szyfrogram.substr(i, 2), 16);\n    let znakKlucza = klucz.charCodeAt((i/2) % klucz.length);\n    odszyfrowane += String.fromCharCode(bajt ^ znakKlucza);\n}\n\ntry {\n    msg.payload = JSON.parse(odszyfrowane);\n} catch(e) {\n    node.error(\"Błąd deszyfrowania: \" + szyfrogram);\n    return null; \n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 660,
+        "wires": [
+            [
+                "b3e6ac84e1b84dd9",
+                "c307f46949df5b29",
+                "e3d4c66796292d37",
+                "32c33c7ff26e49a9"
+            ]
+        ]
+    },
+    {
+        "id": "90f785ea14c95432",
+        "type": "function",
+        "z": "918af7635afbfa0f",
+        "name": "Deszyfrator",
+        "func": "let klucz = \"INZYNIER2024\";\nlet szyfrogram = msg.payload.toString(); \nlet odszyfrowane = \"\";\n\nfor (let i = 0; i < szyfrogram.length; i += 2) {\n    let bajt = parseInt(szyfrogram.substr(i, 2), 16);\n    let znakKlucza = klucz.charCodeAt((i/2) % klucz.length);\n    odszyfrowane += String.fromCharCode(bajt ^ znakKlucza);\n}\n\ntry {\n    msg.payload = JSON.parse(odszyfrowane);\n} catch(e) {\n    node.error(\"Błąd deszyfrowania: \" + szyfrogram);\n    return null; \n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 260,
+        "wires": [
+            [
+                "c836d6d426b4097e",
+                "extract-temp",
+                "func-wilg",
+                "func-cisn",
+                "71ea5299ec3f9717"
+            ]
+        ]
+    },
+    {
+        "id": "42cc323328d136e4",
+        "type": "ui_spacer",
+        "z": "918af7635afbfa0f",
+        "name": "spacer",
+        "group": "aea722c3c7129abf",
+        "order": 2,
+        "width": 12,
+        "height": 1
+    },
+    {
+        "id": "local-mqtt",
+        "type": "mqtt-broker",
+        "name": "Malinka Broker",
+        "broker": "192.168.220.1",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "aea722c3c7129abf",
+        "type": "ui_group",
+        "name": "Status Systemu",
+        "tab": "99612e67e2e6f4ba",
+        "order": 3,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "45b9f86db8ee041e",
+        "type": "ui_group",
+        "name": "Aktualne Pomiary",
+        "tab": "99612e67e2e6f4ba",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "bae641eebc7a5d0e",
+        "type": "ui_group",
+        "name": "Historia i Trendy",
+        "tab": "99612e67e2e6f4ba",
+        "order": 2,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "8c41fdd390d50f36",
+        "type": "telegram bot",
+        "botname": "LodowkaAlarmBot",
+        "usernames": "",
+        "chatids": "",
+        "baseapiurl": "",
+        "testenvironment": false,
+        "updatemode": "polling",
+        "pollinterval": 300,
+        "usesocks": false,
+        "sockshost": "",
+        "socksprotocol": "socks5",
+        "socksport": 6667,
+        "socksusername": "anonymous",
+        "sockspassword": "",
+        "bothost": "",
+        "botpath": "",
+        "localbothost": "0.0.0.0",
+        "localbotport": 8443,
+        "publicbotport": 8443,
+        "privatekey": "",
+        "certificate": "",
+        "useselfsignedcertificate": false,
+        "sslterminated": false,
+        "verboselogging": false
+    },
+    {
+        "id": "mydb-config",
+        "type": "sqlitedb",
+        "db": "lodowka.db",
+        "mode": "rwc"
+    },
+    {
+        "id": "99612e67e2e6f4ba",
+        "type": "ui_tab",
+        "name": "Lodówka",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "f401154bd9259f18",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6",
+            "node-red-contrib-telegrambot": "17.1.3",
+            "node-red-node-sqlite": "2.0.1"
+        }
+    }
+]
