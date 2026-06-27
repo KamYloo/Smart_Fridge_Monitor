@@ -23,7 +23,7 @@ System zdalnego monitorowania lodówki oparty na trzech węzłach **ESP32**, kom
 ## ✅ Funkcje systemu
 
 - 🔐 **Kontrola dostępu** — odczyt karty RFID odblokowuje dostęp do lodówki na 15 sekund
-- 💡 **Detekcja otwarcia** — fotorezystor wykrywa czy drzwi lodówki są otwarte
+- 💡 **Detekcja otwarcia** — czujnik światła wykrywa czy drzwi lodówki są otwarte
 - 🚨 **Alarmy** — powiadomienie przy nieautoryzowanym otwarciu lub zbyt długo otwartych drzwiach
 - 🌡️ **Monitoring środowiska** — pomiar temperatury, wilgotności, ciśnienia i jakości powietrza (VOC) w lodówce co 10 sekund
 - 📳 **Wykrywanie wstrząsów** — akcelerometr reaguje na próby kradzieży lub gwałtownego przesunięcia lodówki
@@ -40,7 +40,7 @@ System zdalnego monitorowania lodówki oparty na trzech węzłach **ESP32**, kom
   +--------------------+     +---------------------+     +--------------------+
   |      Wezel 1       |     |       Wezel 2        |     |      Wezel 3       |
   |  ESP32 + MFRC522   |     |   ESP32 + BME680     |     |  ESP32 + MPU6500   |
-  |  + fotorezystor    |     |                      |     |                    |
+  |  + czujnik swiatla |     |                      |     |                    |
   |                    |     |  - temperatura       |     |  - akcelerometr    |
   |  - autoryz. RFID   |     |  - wilgotnosc        |     |  - wykrycie wstrz. |
   |  - detekcja drzwi  |     |  - cisnienie         |     |                    |
@@ -70,12 +70,12 @@ System zdalnego monitorowania lodówki oparty na trzech węzłach **ESP32**, kom
 
 ## 🔩 Opis węzłów
 
-### Węzeł 1 — Kontrola dostępu (RFID + LDR)
+### Węzeł 1 — Kontrola dostępu (RFID + czujnik światła)
 
-**Sensor:** MFRC522 (RFID) + fotorezystor LDR  
-**Piny:** SS=GPIO5, RST=GPIO22, LDR=GPIO34 (ADC)
+**Sensory:** MFRC522 (RFID) + czujnik światła (ADC)  
+**Piny:** SS=GPIO5, RST=GPIO22, LIGHT=GPIO34 (ADC)
 
-Węzeł pełni rolę strażnika lodówki. Czytnik RFID autoryzuje użytkownika, a fotorezystor monitoruje stan drzwi (wartość ADC > 2000 = drzwi otwarte).
+Węzeł pełni rolę strażnika lodówki. Czytnik RFID autoryzuje użytkownika, a czujnik światła monitoruje stan drzwi (wartość ADC > 2000 = drzwi otwarte, do środka wpada światło).
 
 **Logika działania:**
 
@@ -245,7 +245,7 @@ Przy każdym zdarzeniu na topiku `lodowka/alarm` Node-RED wysyła wiadomość pr
 projektIOT/
 |
 +-- KodWezly/
-|   +-- Wezel1/                    # Węzeł 1: RFID + LDR
+|   +-- Wezel1/                    # Węzeł 1: RFID + czujnik światła
 |   |   +-- src/
 |   |   |   +-- main.cpp           # Kod źródłowy ESP32
 |   |   +-- platformio.ini         # Konfiguracja PlatformIO
@@ -277,7 +277,7 @@ projektIOT/
 
 ### Węzeł 1:
 - 1× czytnik **MFRC522** (RFID 13.56 MHz)
-- 1× **fotorezystor** (LDR) + rezystor 10 kΩ (dzielnik napięcia)
+- 1× **czujnik światła** (wyjście analogowe, GPIO34)
 - 1× karta RFID lub brelok
 
 ### Węzeł 2:
